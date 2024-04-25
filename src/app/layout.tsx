@@ -1,8 +1,15 @@
+import SiteFooter from "@/components/site-footer";
+import SiteHeader from "@/components/site-header";
+import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +22,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          "flex min-h-screen flex-col bg-background font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SiteHeader />
+          <main className="container grow py-4">{children}</main>
+          <SiteFooter />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
